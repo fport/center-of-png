@@ -1,12 +1,11 @@
-import cv2
 import os
 from deneme import center
 from flask import Flask, render_template, flash, request, redirect, url_for
 from werkzeug.utils import secure_filename
+from uuid import uuid4
 
 app = Flask(__name__)
 
-from uuid import uuid4
 
 UPLOAD_FOLDER = 'static/upload/'
 
@@ -15,7 +14,7 @@ app.secret_key = "secret key"
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
-ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
+ALLOWED_EXTENSIONS = set(['png','jpg','jpeg'])
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -40,7 +39,8 @@ def upload_image():
 	
 		flash('Image successfully uploaded and displayed')
 		x,y= center(file)
-		return render_template('upload.html', filename="a"+filename, x=x,y=y)
+		urn = uuid4()
+		return render_template('upload.html', filename=filename, x=x,y=y,urn=urn)
 	else:
 		flash('Allowed image types are -> png, jpg, jpeg')
 		return redirect(request.url)
@@ -48,17 +48,9 @@ def upload_image():
 
 @app.route('/display/<filename>')
 def display_image(filename):
-	#print('display_image filename: ' + filename)
 	return redirect(url_for('static', filename='uploads/' + filename), code=301)
 
 
 
 if __name__ == "__main__":
     app.run(debug=True)
-
-
-    #print(liste[109264:])  # 109264 - 109268 eleman aralığını görmek için 
-
-
-    # cv2.imshow("deneme", img)
-    # cv2.waitKey()
