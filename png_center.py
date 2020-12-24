@@ -1,8 +1,5 @@
 import cv2
 import os
-import matplotlib.pyplot as plt
-import matplotlib.image as mpimg
-from PIL import Image
 from deneme import center
 from flask import Flask, render_template, flash, request, redirect, url_for
 from werkzeug.utils import secure_filename

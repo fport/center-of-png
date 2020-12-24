@@ -3,13 +3,13 @@ import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 from PIL import Image
 
-from uuid import uuid4
+# from uuid import uuid4
 
 
 def center(file):
-    img = Image.open(file)
-    img = img.convert("RGBA")
-    datas = img.getdata()
+    imgGet = Image.open(file)
+    imgGet = imgGet.convert("RGBA")
+    datas = imgGet.getdata()
 
     newData = []
     for item in datas:
@@ -18,23 +18,15 @@ def center(file):
         else:
             newData.append(item)
 
-    img.putdata(newData)
-    img.save(file.filename, "PNG")
+    imgGet.putdata(newData)
+    imgGet.save(file.filename, "PNG")
 
     img = cv2.imread(file.filename,cv2.IMREAD_GRAYSCALE)
-    # im = cv2.imread('img3.png',cv2.COLOR_BGR2HSV)
 
-    # Negate image so whites become black 
     img =255-img #beyazlar siyah oldu
 
-    # Find anything not black, i.e. the ball(kullandığımız görüntü)
-
-    nz = cv2.findNonZero(img)    #Sıfır olmayan piksellerin konumlarının listesini döndürür !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1 siyah olmayanların koordinatları
-
-    #print(type(nz))    #output = <class 'numpy.ndarray'>
-    #print(nz)
-
-
+    nz = cv2.findNonZero(img)    
+    
     liste = list()
 
     for array in nz:
@@ -47,8 +39,6 @@ def center(file):
         x_coordinates = liste[i][0][0]
         liste_x.append(x_coordinates)
         i+=1
-
-    #print(liste_x)
 
     m_x = len(liste_x)
 
@@ -65,7 +55,6 @@ def center(file):
         liste_y.append(y_coordinates)
         j+=1
 
-    #print(liste_y)
 
     m_y = len(liste_y)
 
@@ -77,17 +66,19 @@ def center(file):
 
     print ("cismin ağırlık merkezi koordinatları:","(" ,x,",", y ,")")
 
-    #print(img.shape)
 
     image = mpimg.imread(file.filename)
 
-
+    print(file.filename)
     plt.imshow(image)
     plt.plot(x, y, "o", markersize=10)  # og:shorthand for green circle
 
-    # urn = uuid4()
+
     plt.savefig('static/upload/a{}'.format(file.filename))
-    # print(urn.hex)
-    # plt.show()
+   
+    # img =False
+    # plt = False
+    # image = False
+    # imgGet = False
     
     return x,y
